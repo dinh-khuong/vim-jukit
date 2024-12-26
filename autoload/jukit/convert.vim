@@ -57,8 +57,12 @@ fun! s:convert_to_ipynb(args) abort
         return
     endif
 
-    echom '[vim-jukit] Opening file. Press CTRL+C to cancel.'
-    call system(a:args[0] . " " . escape(out_file, ' \'))
+    if g:jukit_convert_open_detach == 1
+        call jobstart(a:args[0] . " " . escape(out_file, ' \'), { 'detach': 0 })
+    else
+        echom '[vim-jukit] Opening file. Press CTRL+C to cancel.'
+        call jobstart(a:args[0] . " " . escape(out_file, ' \'), { 'detach': 1 })
+    endif
 endfun
 
 fun! s:convert_to_script() abort
